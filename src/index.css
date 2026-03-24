@@ -1,0 +1,41 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Calorix — design tokens (prompt) */
+@layer base {
+  :root {
+    --calorix-green: #22c55e;
+    --calorix-green-dark: #16a34a;
+    --calorix-accent: #3b82f6;
+    --calorix-bg: #f8fafc;
+    --calorix-text: #0f172a;
+
+    --background: 210 40% 98%;
+    --foreground: 222 47% 11%;
+    --border: 214 32% 91%;
+    --radius: 0.75rem;
+  }
+
+  body {
+    background-color: var(--calorix-bg);
+    color: var(--calorix-text);
+    @apply antialiased;
+    font-family:
+      'Plus Jakarta Sans',
+      ui-sans-serif,
+      system-ui,
+      -apple-system,
+      Segoe UI,
+      Roboto,
+      Helvetica,
+      Arial,
+      sans-serif;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
