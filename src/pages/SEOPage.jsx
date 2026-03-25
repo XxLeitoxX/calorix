@@ -2,8 +2,10 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link, Navigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import DailyTargetRibbon from '../components/DailyTargetRibbon'
 import Footer from '../components/Footer'
 import Header from '../components/Header'
+import MobileSummaryBar from '../components/MobileSummaryBar'
 import useCalorieContext from '../context/useCalorieContext'
 import useSeoMeta from '../hooks/useSeoMeta'
 import { fetchUsdaSearchCandidates, getMacroNutrients } from '../services/usdaApi'
@@ -98,14 +100,16 @@ export default function SEOPage() {
   if (!entry) return <Navigate to="/" replace />
   if (!nutrition) {
     return (
-      <main className="min-h-screen bg-calorix-bg">
+      <main className="min-h-screen bg-calorix-bg pb-32 md:pb-10">
         <div className="mx-auto max-w-6xl px-4 py-8 md:px-6">
           <Header />
+          <DailyTargetRibbon />
           <Card className="mt-8">
             <CardContent className="pt-6 text-sm text-calorix-muted">Loading SEO page...</CardContent>
           </Card>
           <Footer />
         </div>
+        <MobileSummaryBar />
       </main>
     )
   }
@@ -114,9 +118,10 @@ export default function SEOPage() {
   const relatedFoods = getRelatedFoodKeywords(entry, 5)
 
   return (
-    <main className="min-h-screen bg-calorix-bg">
+    <main className="min-h-screen bg-calorix-bg pb-32 md:pb-10">
       <div className="mx-auto max-w-6xl px-4 py-8 md:px-6">
         <Header />
+        <DailyTargetRibbon />
         <div className="mt-8 grid gap-6 md:grid-cols-[1fr_320px]">
           <Card>
             <CardHeader>
@@ -240,6 +245,7 @@ export default function SEOPage() {
       {jsonLd && (
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       )}
+      <MobileSummaryBar />
     </main>
   )
 }

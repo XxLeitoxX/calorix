@@ -44,6 +44,8 @@ export const translations = {
     goalLose: 'Lose fat',
     goalMaintain: 'Maintain',
     goalGain: 'Gain mass',
+    clearSavedData: 'Clear saved',
+    clearSavedDataHint: 'Removes profile and today’s food list from this browser. Language is kept.',
     estimatedCal: (n) => `👉 You need ${n} kcal/day`,
     seoTitle: 'Free Calorie Calculator for Foods',
     seoBody1:
@@ -116,6 +118,9 @@ export const translations = {
     goalLose: 'Perder grasa',
     goalMaintain: 'Mantener',
     goalGain: 'Ganar masa',
+    clearSavedData: 'Limpiar guardado',
+    clearSavedDataHint:
+      'Quita el perfil y la lista de hoy guardados en este navegador. El idioma se mantiene.',
     estimatedCal: (n) => `👉 Necesitas ${n} kcal/día`,
     seoTitle: 'Calculadora de calorías de alimentos gratis',
     seoBody1:

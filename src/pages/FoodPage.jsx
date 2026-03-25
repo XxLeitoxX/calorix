@@ -2,9 +2,11 @@ import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import DailyTargetRibbon from '../components/DailyTargetRibbon'
 import SEOFoodTemplate from '../components/SEOFoodTemplate'
 import Footer from '../components/Footer'
 import Header from '../components/Header'
+import MobileSummaryBar from '../components/MobileSummaryBar'
 import useCalorieContext from '../context/useCalorieContext'
 import { getFoodBySlug, getFoodFallbackMacros, getRelatedFoods } from '../data/seoFoods'
 import { getUiStrings } from '../i18n/uiStrings'
@@ -75,9 +77,10 @@ export default function FoodPage() {
 
   if (!food) {
     return (
-      <main className="min-h-screen bg-calorix-bg">
+      <main className="min-h-screen bg-calorix-bg pb-32 md:pb-10">
         <div className="mx-auto max-w-6xl px-4 py-8 md:px-6">
           <Header />
+          <DailyTargetRibbon />
           <Card className="mt-8">
             <CardContent className="space-y-4 pt-6">
               <p className="text-sm text-calorix-muted">Food not found.</p>
@@ -86,14 +89,16 @@ export default function FoodPage() {
           </Card>
           <Footer />
         </div>
+        <MobileSummaryBar />
       </main>
     )
   }
 
   return (
-    <main className="min-h-screen bg-calorix-bg">
+    <main className="min-h-screen bg-calorix-bg pb-32 md:pb-10">
       <div className="mx-auto max-w-6xl px-4 py-8 md:px-6">
         <Header />
+        <DailyTargetRibbon />
         {!nutrition ? (
           <Card className="mt-8">
             <CardHeader>
@@ -111,6 +116,7 @@ export default function FoodPage() {
       {jsonLd && (
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       )}
+      <MobileSummaryBar />
     </main>
   )
 }

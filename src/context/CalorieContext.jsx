@@ -2,6 +2,44 @@ import { useCallback, useEffect, useMemo, useReducer, useState } from 'react'
 import { useFoodSearch } from '../hooks/useFoodSearch'
 import CalorieContext from './calorie-context'
 
+const PROFILE_STORAGE_KEY = 'calorix_profile'
+
+const DEFAULT_PROFILE = {
+  age: 30,
+  weight: 70,
+  height: 170,
+  goal: 'maintain',
+}
+
+const GOAL_FACTORS = {
+  lose: 0.85,
+  maintain: 1,
+  gain: 1.15,
+}
+
+function loadProfile() {
+  try {
+    const raw = localStorage.getItem(PROFILE_STORAGE_KEY)
+    if (!raw) return { ...DEFAULT_PROFILE }
+    const parsed = JSON.parse(raw)
+    if (!parsed || typeof parsed !== 'object') return { ...DEFAULT_PROFILE }
+    const age = Number(parsed.age)
+    const weight = Number(parsed.weight)
+    const height = Number(parsed.height)
+    const g = parsed.goal
+    const goal =
+      g === 'lose' || g === 'maintain' || g === 'gain' ? g : DEFAULT_PROFILE.goal
+    return {
+      age: Number.isFinite(age) && age >= 1 ? Math.round(age) : DEFAULT_PROFILE.age,
+      weight: Number.isFinite(weight) && weight >= 1 ? weight : DEFAULT_PROFILE.weight,
+      height: Number.isFinite(height) && height >= 1 ? height : DEFAULT_PROFILE.height,
+      goal,
+    }
+  } catch {
+    return { ...DEFAULT_PROFILE }
+  }
+}
+
 function round(value) {
   return Math.round(value * 10) / 10
 }
@@ -100,6 +138,8 @@ function reducer(state, action) {
         ...state,
         selectedFoods: state.selectedFoods.filter((item) => item.id !== action.payload),
       }
+    case 'RESET_CALCULATOR_STATE':
+      return { query: '', selectedFoods: [] }
     default:
       return state
   }
@@ -125,6 +165,23 @@ export function CalorieProvider({ children }) {
       /* ignore */
     }
   }
+
+  const [profile, setProfile] = useState(() => loadProfile())
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify(profile))
+    } catch {
+      /* ignore */
+    }
+  }, [profile])
+
+  const targetDailyCalories = useMemo(() => {
+    const { age, weight, height, goal } = profile
+    const bmr = 10 * weight + 6.25 * height - 5 * age + 5
+    const tdee = bmr * 1.35
+    return Math.round(tdee * GOAL_FACTORS[goal])
+  }, [profile])
 
   const [highlightFoodId, setHighlightFoodId] = useState(null)
 
@@ -183,9 +240,33 @@ export function CalorieProvider({ children }) {
     setHighlightFoodId(String(food.id))
   }, [])
 
+  const resetStoredAppData = useCallback(() => {
+    try {
+      localStorage.removeItem(PROFILE_STORAGE_KEY)
+      localStorage.removeItem('calorix_lang')
+      localStorage.removeItem('calfitness_lang')
+    } catch {
+      /* ignore */
+    }
+    setProfile({ ...DEFAULT_PROFILE })
+    setLanguage((current) => {
+      try {
+        localStorage.setItem('calorix_lang', current)
+      } catch {
+        /* ignore */
+      }
+      return current
+    })
+    dispatch({ type: 'RESET_CALCULATOR_STATE' })
+  }, [])
+
   const value = {
     language,
     setLanguage: persistLanguage,
+    profile,
+    setProfile,
+    resetStoredAppData,
+    targetDailyCalories,
     highlightFoodId,
     query: state.query,
     debouncedQuery,

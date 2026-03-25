@@ -23,3 +23,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Accidental files created by running `eval "$(ssh-agent -s)"`
+# (contain shell output / key material, never should be committed)
+eval "$(ssh-agent -s)"
+eval "$(ssh-agent -s)".pub

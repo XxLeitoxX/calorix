@@ -22,7 +22,7 @@ function MacroRow({ label, grams, percent, barClass }) {
 }
 
 export default function SummaryPanel() {
-  const { totals, shareUrl, language } = useCalorieContext()
+  const { totals, shareUrl, language, targetDailyCalories } = useCalorieContext()
   const t = getUiStrings(language)
   const [copied, setCopied] = useState(false)
 
@@ -53,6 +53,9 @@ export default function SummaryPanel() {
         <CardTitle className="text-lg">{t.summary}</CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
+        <p className="rounded-xl bg-gradient-to-r from-primary/10 to-accent/10 px-3 py-2.5 text-center text-sm font-bold text-calorix-text">
+          {t.estimatedCal(targetDailyCalories)}
+        </p>
         <div>
           <p className="text-sm font-medium text-calorix-muted">{t.kcalToday}</p>
           <p className="mt-1 flex items-baseline gap-2 text-4xl font-black tabular-nums tracking-tight text-calorix-text">
